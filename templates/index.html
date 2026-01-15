@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iris Classification - Professional ML API</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>🌸 Iris Classification System</h1>
+                <p class="subtitle">Advanced Machine Learning with Multiple Models & Feature Engineering</p>
+            </div>
+        </header>
+
+        <!-- Model Info Section -->
+        <section class="model-info-section">
+            <h2>😛 Available Models</h2>
+            <div id="modelCards" class="model-cards">
+                <div class="loading">Loading model information...</div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Input Section -->
+            <section class="input-section card">
+                <h2>🔬 Enter Iris Measurements</h2>
+
+                <div class="input-group">
+                    <label for="sepalLength">
+                        <span class="label-text">Sepal Length (cm)</span>
+                        <span class="label-range">Range: 4.3 - 7.9</span>
+                    </label>
+                    <input type="number" id="sepalLength" step="0.1" min="0" max="10" value="5.1" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="sepalWidth">
+                        <span class="label-text">Sepal Width (cm)</span>
+                        <span class="label-range">Range: 2.0 - 4.4</span>
+                    </label>
+                    <input type="number" id="sepalWidth" step="0.1" min="0" max="10" value="3.5" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="petalLength">
+                        <span class="label-text">Petal Length (cm)</span>
+                        <span class="label-range">Range: 1.0 - 6.9</span>
+                    </label>
+                    <input type="number" id="petalLength" step="0.1" min="0" max="10" value="1.4" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="petalWidth">
+                        <span class="label-text">Petal Width (cm)</span>
+                        <span class="label-range">Range: 0.1 - 2.5</span>
+                    </label>
+                    <input type="number" id="petalWidth" step="0.1" min="0" max="10" value="0.2" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="modelSelect">
+                        <span class="label-text">Select Model</span>
+                    </label>
+                    <select id="modelSelect">
+                        <option value="best">🏆 Best Model (Auto)</option>
+                        <option value="logistic_regression">📈 Logistic Regression</option>
+                        <option value="svm">🎯 Support Vector Machine</option>
+                        <option value="random_forest">🌲 Random Forest</option>
+                    </select>
+                </div>
+
+                <div class="button-group">
+                    <button onclick="predictSingle()" class="btn btn-primary">
+                        🔮 Predict
+                    </button>
+                    <button onclick="predictAll()" class="btn btn-secondary">
+                        📊 Compare All Models
+                    </button>
+                    <button onclick="loadExample()" class="btn btn-tertiary">
+                        📝 Load Example
+                    </button>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section card">
+                <h2>📈 Prediction Results</h2>
+                <div id="results" class="results-placeholder">
+                    <p>Enter measurements and click "Predict" to see results</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Examples Section -->
+        <section class="examples-section">
+            <h2>📚 Example Measurements</h2>
+            <div class="examples-grid">
+                <div class="example-card" onclick="loadSpecificExample('setosa')">
+                    <h3>🌼 Iris Setosa</h3>
+                    <ul>
+                        <li>Sepal Length: 5.1 cm</li>
+                        <li>Sepal Width: 3.5 cm</li>
+                        <li>Petal Length: 1.4 cm</li>
+                        <li>Petal Width: 0.2 cm</li>
+                    </ul>
+                </div>
+                <div class="example-card" onclick="loadSpecificExample('versicolor')">
+                    <h3>🌺 Iris Versicolor</h3>
+                    <ul>
+                        <li>Sepal Length: 6.4 cm</li>
+                        <li>Sepal Width: 3.2 cm</li>
+                        <li>Petal Length: 4.5 cm</li>
+                        <li>Petal Width: 1.5 cm</li>
+                    </ul>
+                </div>
+                <div class="example-card" onclick="loadSpecificExample('virginica')">
+                    <h3>🌸 Iris Virginica</h3>
+                    <ul>
+                        <li>Sepal Length: 6.3 cm</li>
+                        <li>Sepal Width: 3.3 cm</li>
+                        <li>Petal Length: 6.0 cm</li>
+                        <li>Petal Width: 2.5 cm</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Built with FastAPI, scikit-learn, and modern ML techniques by (AI) KOSAL Chansothay and Team 4 AMS</p>
+            <p>© 2026 Iris Classification System | <a href="/api/docs">API Documentation</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Example data
+        const examples = {
+            'setosa': { sepal_length: 5.1, sepal_width: 3.5, petal_length: 1.4, petal_width: 0.2 },
+            'versicolor': { sepal_length: 6.4, sepal_width: 3.2, petal_length: 4.5, petal_width: 1.5 },
+            'virginica': { sepal_length: 6.3, sepal_width: 3.3, petal_length: 6.0, petal_width: 2.5 }
+        };
+
+        // Load model information on page load
+        window.onload = async function () {
+            await loadModelInfo();
+        };
+
+        // Load model information
+        async function loadModelInfo() {
+            try {
+                const response = await fetch('/api/models/info');
+                const data = await response.json();
+
+                const modelCards = document.getElementById('modelCards');
+                modelCards.innerHTML = '';
+
+                for (const [name, details] of Object.entries(data.model_details)) {
+                    const isBest = name === data.best_model;
+                    const card = document.createElement('div');
+                    card.className = `model-card ${isBest ? 'best-model' : ''}`;
+                    card.innerHTML = `
+                        ${isBest ? '<div class="best-badge">🏆 Best Model</div>' : ''}
+                        <h3>${name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
+                        <div class="model-stats">
+                            <div class="stat">
+                                <span class="stat-label">Accuracy</span>
+                                <span class="stat-value">${(details.accuracy * 100).toFixed(2)}%</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">CV Score</span>
+                                <span class="stat-value">${(details.cv_mean * 100).toFixed(2)}%</span>
+                            </div>
+                        </div>
+                    `;
+                    modelCards.appendChild(card);
+                }
+            } catch (error) {
+                console.error('Error loading model info:', error);
+            }
+        }
+
+        // Get input values
+        function getInputValues() {
+            return {
+                sepal_length: parseFloat(document.getElementById('sepalLength').value),
+                sepal_width: parseFloat(document.getElementById('sepalWidth').value),
+                petal_length: parseFloat(document.getElementById('petalLength').value),
+                petal_width: parseFloat(document.getElementById('petalWidth').value)
+            };
+        }
+
+        // Predict with single model
+        async function predictSingle() {
+            const features = getInputValues();
+            const modelName = document.getElementById('modelSelect').value;
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.innerHTML = '<div class="loading">Predicting...</div>';
+
+            try {
+                const response = await fetch('/api/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ features, model_name: modelName })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Handle validation errors (422) and other errors
+                    let errorMsg = 'Prediction failed';
+                    if (data.detail) {
+                        if (Array.isArray(data.detail)) {
+                            // Pydantic validation errors
+                            errorMsg = data.detail.map(err => {
+                                const field = err.loc ? err.loc.join(' → ') : 'Unknown field';
+                                return `${field}: ${err.msg}`;
+                            }).join('<br>');
+                        } else {
+                            errorMsg = data.detail;
+                        }
+                    }
+                    resultsDiv.innerHTML = `<div class="error">Error: ${errorMsg}</div>`;
+                    return;
+                }
+
+                displaySingleResult(data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Display single prediction result
+        function displaySingleResult(data) {
+            const resultsDiv = document.getElementById('results');
+            const speciesClass = data.prediction.toLowerCase().replace('iris-', '');
+
+            let probHtml = '';
+            for (const [species, prob] of Object.entries(data.probabilities)) {
+                const percentage = (prob * 100).toFixed(2);
+                probHtml += `
+                    <div class="probability-bar">
+                        <div class="prob-label">${species}</div>
+                        <div class="prob-bar-container">
+                            <div class="prob-bar" style="width: ${percentage}%"></div>
+                        </div>
+                        <div class="prob-value">${percentage}%</div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = `
+                <div class="result-card ${speciesClass}">
+                    <div class="result-header">
+                        <h3>Predicted Species</h3>
+                        <div class="prediction-badge ${speciesClass}">${data.prediction}</div>
+                    </div>
+                    <div class="confidence-section">
+                        <span class="confidence-label">Confidence</span>
+                        <span class="confidence-value">${(data.confidence * 100).toFixed(2)}%</span>
+                    </div>
+                    <div class="model-used">Model: ${data.model_used.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                    <div class="probabilities-section">
+                        <h4>Class Probabilities</h4>
+                        ${probHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Predict with all models
+        async function predictAll() {
+            const features = getInputValues();
+            const resultsDiv = document.getElementById('results');
+
+            resultsDiv.innerHTML = '<div class="loading">Comparing all models...</div>';
+
+            try {
+                const response = await fetch('/api/predict/all', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(features)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Handle validation errors (422) and other errors
+                    let errorMsg = 'Prediction failed';
+                    if (data.detail) {
+                        if (Array.isArray(data.detail)) {
+                            // Pydantic validation errors
+                            errorMsg = data.detail.map(err => {
+                                const field = err.loc ? err.loc.join(' → ') : 'Unknown field';
+                                return `${field}: ${err.msg}`;
+                            }).join('<br>');
+                        } else {
+                            errorMsg = data.detail;
+                        }
+                    }
+                    resultsDiv.innerHTML = `<div class="error">Error: ${errorMsg}</div>`;
+                    return;
+                }
+
+                displayAllResults(data);
+            } catch (error) {
+                resultsDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+
+        // Display all models results
+        function displayAllResults(data) {
+            const resultsDiv = document.getElementById('results');
+            const consensusClass = data.consensus_prediction.toLowerCase().replace('iris-', '');
+
+            let modelsHtml = '';
+            for (const [modelName, result] of Object.entries(data.predictions)) {
+                const speciesClass = result.prediction.toLowerCase().replace('iris-', '');
+                modelsHtml += `
+                    <div class="model-result">
+                        <h4>${modelName.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h4>
+                        <div class="prediction-badge ${speciesClass}">${result.prediction}</div>
+                        <div class="confidence-mini">${(result.confidence * 100).toFixed(1)}% confident</div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = `
+                <div class="all-results">
+                    <div class="consensus-section ${consensusClass}">
+                        <h3>🎯 Consensus Prediction</h3>
+                        <div class="prediction-badge ${consensusClass} large">${data.consensus_prediction}</div>
+                    </div>
+                    <div class="models-comparison">
+                        <h4>Model-by-Model Breakdown</h4>
+                        <div class="models-grid">
+                            ${modelsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load example data
+        function loadExample() {
+            const exampleKeys = Object.keys(examples);
+            const randomKey = exampleKeys[Math.floor(Math.random() * exampleKeys.length)];
+            loadSpecificExample(randomKey);
+        }
+
+        // Load specific example
+        function loadSpecificExample(type) {
+            const example = examples[type];
+            document.getElementById('sepalLength').value = example.sepal_length;
+            document.getElementById('sepalWidth').value = example.sepal_width;
+            document.getElementById('petalLength').value = example.petal_length;
+            document.getElementById('petalWidth').value = example.petal_width;
+        }
+    </script>
+</body>
+
+</html>

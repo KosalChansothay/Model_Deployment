@@ -1,0 +1,65 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pkl
+*.pickle
+*.safetensors
+*.so
+*.egg-info/
+.env
+.venv/
+venv/
+ENV/
+*.log
+
+# Jupyter / IPython
+.ipynb_checkpoints/
+*.ipynb
+
+# VS Code
+.vscode/
+.history/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# Build / Dist
+build/
+dist/
+*.egg
+.eggs/
+*.manifest
+*.spec
+
+# Coverage / Testing
+.coverage
+htmlcov/
+.tox/
+.pytest_cache/
+nosetests.xml
+coverage.xml
+
+# Node / Frontend (if applicable)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Data / Models (large files)
+data/
+models/
+*.h5
+*.tar.gz
+
+# Ignore SSL keys or secrets
+*.crt
+*.key
+*.pem
+secrets.json

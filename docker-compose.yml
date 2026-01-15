@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  iris-api:
+    build: .
+    container_name: iris-classifier
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - ./static:/app/static
+      - ./templates:/app/templates
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
